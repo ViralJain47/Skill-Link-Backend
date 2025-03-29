@@ -21,9 +21,15 @@ const userSchema = new mongoose.Schema({
     bio: String,
     skills: [String],
     role: String,
-    rating: Number
+    rating: Number,
+    isVerified: {
+        type: Boolean,
+        default: false
+    }
 
 
 }, { timestamps: true })
 
-export default user = mongoose.Model("users",userSchema);
+const user = mongoose.model('users',userSchema);
+
+export default user;

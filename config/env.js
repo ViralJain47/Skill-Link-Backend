@@ -6,4 +6,8 @@ export const config = {
   mongoUri: process.env.MONGO_URI,
   jwtSecret: process.env.JWT_SECRET,
   env: process.env.NODE_ENV || "development",
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+  requestUri: process.env.REQUEST_URI,
+  refreshToken: process.env.REFRESH_TOKEN
 };
