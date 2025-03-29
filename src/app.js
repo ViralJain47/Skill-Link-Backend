@@ -16,3 +16,4 @@ mongoose.connect(config.mongoUri)
   .catch(err => console.error("MongoDB Connection Error:", err));
 
 export default app;
+export {mongoose};
