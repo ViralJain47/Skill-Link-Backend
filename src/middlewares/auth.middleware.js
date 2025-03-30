@@ -1,5 +1,7 @@
 import validator from 'validator';
 import user from '../models/user.model.js'
+import bcrypt from 'bcryptjs';
+import { verifyOTP } from '../services/otp.service.js';
 
 
 const registerMiddleware = async (req, res, next) => {
@@ -28,7 +30,7 @@ const registerMiddleware = async (req, res, next) => {
 
 const loginMiddleware = async (req,res,next) => {
     try {
-        const {email , password} = res.body;
+        const {email , password} = req.body;
 
         const existingUser = await user.findOne({email});
 
@@ -44,9 +46,29 @@ const loginMiddleware = async (req,res,next) => {
             return res.status(400).json({error: "Incorrect Password"})
         }
 
+        next();
+
     } catch (error) {
+        console.log(error)
         res.status(500).json({error : "Internal server error"})
     }
 }
 
-export { registerMiddleware , loginMiddleware };
+const OTPVerifyMiddleware = async (req,res,next) => {
+    try {
+        const {userId , otp } = req.body;
+        const verified = await verifyOTP(userId,otp);
+
+        if(!verified)
+        {
+            return res.status(400).json({error: "Incorrect OTP"});
+        }
+
+        next();
+        
+    } catch (error) {
+        res.status(500).json({error: "Internal server error"})
+    }
+}
+
+export { registerMiddleware , loginMiddleware , OTPVerifyMiddleware};
