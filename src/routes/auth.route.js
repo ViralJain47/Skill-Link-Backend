@@ -8,6 +8,6 @@ const authRoute = Router();
 authRoute.post("/register", registerMiddleware, registerController)
 authRoute.post("/login", loginMiddleware, loginController);
 authRoute.post("/verify", OTPVerifyMiddleware, OTPVerifyController)
-authRoute.get("/jwtverify", jwtVerifyController)
+authRoute.get("/me", jwtVerifyController)
 
 export default authRoute;
