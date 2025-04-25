@@ -2,7 +2,6 @@ import nodemailer from 'nodemailer'
 import oAuth2Client from '../utils/oauth.js';
 import client from '../utils/redis.js';
 import { config } from '../../config/env.js';
-import { remotebuildexecution_v1 } from 'googleapis';
 
 const sendOTP = async (receiver,otp) => {
 

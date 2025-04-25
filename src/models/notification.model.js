@@ -6,4 +6,5 @@ const NotificationSchema = new mongoose.Schema({
     isRead: { type: Boolean, default: false }
 }, { timestamps: true });
 
-export default mongoose.model("notifications", NotificationSchema);
+const notifications =  mongoose.model("notifications", NotificationSchema);
+export default notifications;

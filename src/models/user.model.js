@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true },
     profilePicture: { type: String },
     bio: { type: String },
-    
+    verified: {type: Boolean , default: false},
     skillsTaught: [{ type: String }],
     skillsLearning: [{ type: String }],
     mentorRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: "sessions" }],
@@ -15,6 +15,6 @@ const userSchema = new mongoose.Schema({
     mentorRating: { type: Number, default: 0 },
 }, { timestamps: true })
 
-const user = mongoose.model('users',userSchema);
+const users = mongoose.model('users',userSchema);
 
-export default user;
+export default users;

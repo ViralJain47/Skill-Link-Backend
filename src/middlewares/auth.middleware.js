@@ -1,5 +1,5 @@
 import validator from 'validator';
-import user from '../models/user.model.js'
+import users from '../models/user.model.js'
 import bcrypt from 'bcryptjs';
 import { verifyOTP } from '../services/otp.service.js';
 
@@ -17,7 +17,7 @@ const registerMiddleware = async (req, res, next) => {
             return res.status(400).json({ error: 'Invalid email format' });
         }
 
-        const existingUser = await user.findOne({ email });
+        const existingUser = await users.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ error: 'User already exists' });
         }
@@ -32,7 +32,7 @@ const loginMiddleware = async (req,res,next) => {
     try {
         const {email , password} = req.body;
 
-        const existingUser = await user.findOne({email});
+        const existingUser = await users.findOne({email});
 
         if(!existingUser)
         {

@@ -8,4 +8,5 @@ const reviewSchema = new mongoose.Schema({
     comment: { type: String }
 }, { timestamps: true })
 
-export default review = mongoose.Model("reviews",reviewSchema)
+const reviews = mongoose.model("reviews",reviewSchema)
+export default reviews;

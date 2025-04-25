@@ -8,5 +8,5 @@ const SessionSchema = new mongoose.Schema({
     status: { type: String, enum: ["Pending", "Accepted", "Completed"], default: "Pending" },
 }, { timestamps: true });
 
-const session = mongoose.model("sessions", SessionSchema);
-export default session;
+const sessions = mongoose.model("sessions", SessionSchema);
+export default sessions;

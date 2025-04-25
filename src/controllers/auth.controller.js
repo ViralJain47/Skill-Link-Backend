@@ -1,5 +1,5 @@
-import user from "../models/user.model.js";
-import session from "../models/session.model.js"
+import users from "../models/user.model.js";
+import sessions from "../models/session.model.js";
 import bcrypt from "bcryptjs"
 import { generateOTP, saveOTP, sendOTP } from "../services/otp.service.js"
 import jwt from "jsonwebtoken"
@@ -11,7 +11,7 @@ const registerController = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = await user.create({ name, email, password: hashedPassword })
+        const newUser = await users.create({ name, email, password: hashedPassword })
 
         console.log(newUser)
 
@@ -31,10 +31,18 @@ const loginController = async (req, res) => {
         const sent = await sendOTP(email, otp);
 
         if (sent) {
-            const existingUser = await user.findOne({ email: email });
 
-            await saveOTP(existingUser._id, otp);
-            return res.status(200).json({ message: "OTP sent Successfully", userId: existingUser._id })
+            const existingUser = await users.findOne({ email: email })
+
+            if(!existingUser.verified)
+            {   
+                await saveOTP(existingUser._id, otp);
+                return res.status(200).json({ message: "OTP sent Successfully", userId: existingUser._id })
+            }
+
+            const token = jwt.sign({ userId: existingUser._id }, config.jwtSecret, { expiresIn: '2d' })
+
+            return res.status(200).json({message: "user is verified already", token: token } )
         }
 
         return res.status(500).json({ error: "Internal server error 2" })
@@ -70,9 +78,9 @@ const jwtVerifyController = async (req, res) => {
             } else {
                 const userId = decoded.userId;
 
-                const decodedUser = await user.findById(userId)
-                    .populate("mentorRequests", "session")
-                    .populate("learnerRequests", "session")
+                const decodedUser = await users.findById(userId)
+                    .populate("mentorRequests", sessions)
+                    .populate("learnerRequests", sessions)
                     .select("-password");
 
                 console.log(decodedUser)

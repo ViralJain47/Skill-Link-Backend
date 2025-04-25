@@ -1,0 +1,77 @@
+import events from "../models/event.model.js";
+
+
+const createEvent = (req,res) => {
+    try {
+        const { title , description, date, time, duration, venue, type, maxParticipants , host ,registrationFee, status , media } = req.body;
+
+        const newEvent = events.create({
+            title,
+            description,
+            date,
+            time,
+            duration,
+            venue,
+            type,
+            maxParticipants,
+            host,
+            registrationFee,
+            status,
+            media
+        })
+
+        if(!newEvent)
+        {
+            return res.status(401)
+        }
+
+        res.status(201).json({ message: "Event created successfully", event: newEvent })
+
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error" });
+    }
+}
+
+const getAllEvents = async (req,res) => {
+    try {
+        const allEvents = await events.find({}).populate("host")
+        res.status(200).json(allEvents)
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json({ error: "Internal server error" });
+    }
+    
+}
+
+const updateEvent = async (req, res) => {
+    try {
+        const { id } = req.params;
+        console.log(id)
+        const updatedEvent = await events.findByIdAndUpdate(id, { ...req.body }, { new: true });
+
+        if (!updatedEvent) {
+            return res.status(400).json({ message: 'Event not found' });
+        }
+
+        res.status(200).json({ message: 'Event updated successfully', event: updatedEvent });
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+const deleteEvent = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deletedEvent = await events.findByIdAndDelete(id);
+
+        if (!deletedEvent) {
+            return res.status(400).json({ message: 'Event not found' });
+        }
+
+        res.status(200).json({ message: 'Event deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+export { createEvent, getAllEvents , deleteEvent, updateEvent}
