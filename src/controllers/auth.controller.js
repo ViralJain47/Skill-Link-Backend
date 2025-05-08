@@ -85,7 +85,7 @@ const jwtVerifyController = async (req, res) => {
 
                 console.log(decodedUser)
 
-                res.status(200).json(decodedUser.toObject())
+                res.status(200).json(decodedUser)
             }
         })
 
