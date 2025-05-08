@@ -9,5 +9,5 @@ export const config = {
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
   requestUri: process.env.REQUEST_URI,
-  refreshToken: process.env.REFRESH_TOKEN
+  refreshToken: process.env.REFRESH_TOKEN,
 };
