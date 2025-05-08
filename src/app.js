@@ -13,8 +13,9 @@ import "./models/notification.model.js";
 import "./models/review.model.js";
 import eventRoute from "./routes/event.route.js";
 import authRoute from "./routes/auth.route.js";
-import faker from 'faker';
+import { Faker, en } from '@faker-js/faker';
 
+const customFaker = new Faker({ locale: [en] });
 
 const app = express();
 
@@ -33,45 +34,47 @@ try {
 }
 
 const seedDatabase = async () => {
+
+  console.log(customFaker.word.words(5))
   try {
     await users.deleteMany();
     await events.deleteMany();
 
     const userData = Array.from({ length: 20 }, () => ({
-      name: faker.name.findName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-      profilePicture: faker.image.avatar(),
-      bio: faker.lorem.sentence(),
-      verified: faker.datatype.boolean(),
-      skillsTaught: faker.helpers.shuffle(['JavaScript', 'Node.js', 'React', 'Python', 'Django']).slice(0, 2),
-      skillsLearning: faker.helpers.shuffle(['Blockchain', 'Docker', 'GraphQL', 'AI', 'ML']).slice(0, 2),
+      name: customFaker.person.fullName(),
+      email: customFaker.internet.email(),
+      password: customFaker.internet.password(),
+      profilePicture: customFaker.image.avatar(),
+      bio: customFaker.lorem.sentence(),
+      verified: customFaker.datatype.boolean(),
+      skillsTaught: customFaker.helpers.shuffle(['JavaScript', 'Node.js', 'React', 'Python', 'Django']).slice(0, 2),
+      skillsLearning: customFaker.helpers.shuffle(['Blockchain', 'Docker', 'GraphQL', 'AI', 'ML']).slice(0, 2),
       mentorRequests: [],
       learnerRequests: [],
-      mentorRating: faker.datatype.number({ min: 0, max: 5, precision: 0.1 }),
+      mentorRating: customFaker.number.int({ min: 0, max: 5, precision: 0.1 }),
     }));
 
     const createdUsers = await users.insertMany(userData);
     const userIds = createdUsers.map(user => user._id);
 
     const eventData = Array.from({ length: 10 }, () => {
-      const hostId = faker.helpers.randomize(userIds);
-      const participantCount = faker.datatype.number({ min: 1, max: 5 });
-      const participants = faker.helpers.shuffle(userIds.filter(id => id.toString() !== hostId.toString())).slice(0, participantCount);
+      const hostId = customFaker.helpers.arrayElement(userIds);
+      const participantCount = customFaker.number.int({ min: 1, max: 5 });
+      const participants = customFaker.helpers.shuffle(userIds.filter(id => id.toString() !== hostId.toString())).slice(0, participantCount);
 
       return {
-        title: faker.lorem.words(3),
-        description: faker.lorem.paragraph(),
+        title: customFaker.lorem.words(3),
+        description: customFaker.lorem.paragraph(),
         host: hostId,
-        date: faker.date.future(),
-        maxParticipants: faker.datatype.number({ min: 10, max: 100 }),
-        minParticipants: faker.datatype.number({ min: 2, max: 10 }),
-        duration: `${faker.datatype.number({ min: 1, max: 3 })} hours`,
-        media: faker.image.imageUrl(),
-        venue: faker.address.streetAddress(),
-        registrationFee: faker.datatype.number({ min: 0, max: 100 }),
-        type: faker.helpers.randomize(['online', 'offline']),
-        status: faker.helpers.randomize(['upcoming', 'ongoing', 'completed']),
+        date: customFaker.date.future(),
+        maxParticipants: customFaker.number.int({ min: 10, max: 100 }),
+        minParticipants: customFaker.number.int({ min: 2, max: 10 }),
+        duration: `${customFaker.number.int({ min: 1, max: 3 })} hours`,
+        media: customFaker.image.url,
+        venue: customFaker.location.streetAddress(),
+        registrationFee: customFaker.number.int({ min: 0, max: 100 }),
+        type: customFaker.helpers.arrayElement(['Offline','Online']),
+        status: customFaker.helpers.arrayElement(['upcoming', 'ongoing', 'completed']),
         participants
       };
     });
@@ -84,6 +87,7 @@ const seedDatabase = async () => {
   }
 }
 
-
 export default app;
 export {mongoose};
+
+// await seedDatabase()
