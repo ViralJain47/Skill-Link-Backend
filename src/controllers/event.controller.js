@@ -17,7 +17,7 @@ const createEvent = (req,res) => {
             host,
             registrationFee,
             status,
-            media
+            media,
         })
 
         if(!newEvent)

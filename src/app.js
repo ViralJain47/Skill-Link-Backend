@@ -11,8 +11,12 @@ import events from "./models/event.model.js";
 import "./models/message.model.js";
 import "./models/notification.model.js";
 import "./models/review.model.js";
+import "./models/skill.model.js";
+import "./models/blog.model.js";
+import "./models/comment.model.js";
 import eventRoute from "./routes/event.route.js";
 import authRoute from "./routes/auth.route.js";
+import skillRouter from "./routes/skill.route.js";
 import { Faker, en } from '@faker-js/faker';
 
 const customFaker = new Faker({ locale: [en] });
@@ -24,6 +28,7 @@ app.use(cors());
 app.use(helmet());
 app.use("/api/auth", authRoute);
 app.use("/api/event", eventRoute);
+app.use("/api/skill", skillRouter);
 
 try {
   mongoose.connect(config.mongoUri)

@@ -14,7 +14,8 @@ const eventSchema = new mongoose.Schema({
     registrationFee: { type: Number, default: 0 },
     type: { type: String},
     status: { type: String, enum: ["upcoming", "ongoing", "completed"], default: "upcoming" },
-    participants: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }], 
+    participants: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
+    time: {String} 
 }, { timestamps: true })
 
 const events = mongoose.model("events", eventSchema)
