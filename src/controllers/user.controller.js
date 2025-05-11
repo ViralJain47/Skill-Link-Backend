@@ -25,4 +25,4 @@ const updateProfileController = async (req, res,next) => {
 }
 
 
-exports = { updateProfileController }
+export {updateProfileController}  
