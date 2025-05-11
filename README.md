@@ -12,6 +12,12 @@
 | `/verify`   | `POST` | `{ userId, otp }`                        | `{ message, token }`                  |
 | `/me`       | `GET`  | `{ Authorization: Bearer <token> }` (Header) | `{ ...userData }`                      |
 
+### **User Routes (`/api/user`)**
+
+| Endpoint  | Method | Request Body / Headers                     | Response (200 OK)                     |
+|-----------|--------|--------------------------------------------|----------------------------------------|
+| `/update/:userId` | `POST` | `{ ...updatedUser }`               | `{ message }`                         |
+
 ### **Event Routes (`/api/event`)**
 | Endpoint | Method | Request Body / Headers / Query              | Response (200 OK)                      |
 |----------|--------|---------------------------------------------|----------------------------------------|
