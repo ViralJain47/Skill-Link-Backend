@@ -18,6 +18,8 @@ import eventRoute from "./routes/event.route.js";
 import authRoute from "./routes/auth.route.js";
 import skillRouter from "./routes/skill.route.js";
 import { Faker, en } from '@faker-js/faker';
+import blogRoute from "./routes/blog.route.js";
+import mongoerr from "./middlewares/mongoerr.middleware.js";
 
 const customFaker = new Faker({ locale: [en] });
 
@@ -29,8 +31,10 @@ app.use(helmet());
 app.use("/api/auth", authRoute);
 app.use("/api/event", eventRoute);
 app.use("/api/skill", skillRouter);
+app.use("/api/blog", blogRoute)
+app.use(mongoerr)
 
-try {
+try { 
   mongoose.connect(config.mongoUri)
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.error("MongoDB Connection Error:", err));  

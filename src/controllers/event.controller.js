@@ -1,11 +1,12 @@
+import mongoose, { MongooseError } from "mongoose";
 import events from "../models/event.model.js";
 
 
-const createEvent = (req,res) => {
+const createEvent = async (req, res, next) => {
     try {
-        const { title , description, date, time, duration, venue, type, maxParticipants , host ,registrationFee, status , media } = req.body;
+        const { title, description, date, time, duration, venue, type, maxParticipants, host, registrationFee, status, media } = req.body;
 
-        const newEvent = events.create({
+        const newEvent = await events.create({
             title,
             description,
             date,
@@ -20,31 +21,38 @@ const createEvent = (req,res) => {
             media,
         })
 
-        if(!newEvent)
-        {
+        if (!newEvent) {
             return res.status(401)
         }
 
         res.status(201).json({ message: "Event created successfully", event: newEvent })
 
     } catch (error) {
+
+        if (error instanceof mongoose.Error) {
+            return next(error)
+        }
+
         res.status(500).json({ error: "Internal server error" });
     }
 }
 
-const getAllEvents = async (req,res) => {
+const getAllEvents = async (req, res, next) => {
     try {
         const allEvents = await events.find({}).populate("host")
         res.status(200).json(allEvents)
     }
     catch (error) {
+        if (error instanceof mongoose.Error) {
+            return next(error)
+        }
         console.log(error)
         res.status(500).json({ error: "Internal server error" });
     }
-    
+
 }
 
-const updateEvent = async (req, res) => {
+const updateEvent = async (req, res, next) => {
     try {
         const { id } = req.params;
         console.log(id)
@@ -56,10 +64,13 @@ const updateEvent = async (req, res) => {
 
         res.status(200).json({ message: 'Event updated successfully', event: updatedEvent });
     } catch (error) {
+        if (error instanceof mongoose.Error) {
+            return next(error)
+        }
         res.status(500).json({ error: 'Internal server error' });
     }
 }
-const deleteEvent = async (req, res) => {
+const deleteEvent = async (req, res,next) => {
     try {
         const { id } = req.params;
         const deletedEvent = await events.findByIdAndDelete(id);
@@ -70,8 +81,13 @@ const deleteEvent = async (req, res) => {
 
         res.status(200).json({ message: 'Event deleted successfully' });
     } catch (error) {
+
+        if (error instanceof mongoose.Error) {
+            next(error)
+        }
+
         res.status(500).json({ error: 'Internal server error' });
     }
 }
 
-export { createEvent, getAllEvents , deleteEvent, updateEvent}
+export { createEvent, getAllEvents, deleteEvent, updateEvent }

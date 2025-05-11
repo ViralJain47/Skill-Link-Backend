@@ -1,13 +1,20 @@
 import { google } from 'googleapis'
 import { config } from '../../config/env.js'
 
-const oAuth2Client = new google.auth.OAuth2(
-    config.clientId,
-    config.clientSecret,
-    config.requestUri
-)
-oAuth2Client.setCredentials({refresh_token: config.refreshToken})
+let oAuth2Client;
 
-console.log("oAuth Setup")
+try {
+    oAuth2Client = new google.auth.OAuth2(
+        config.clientId,
+        config.clientSecret,
+        config.requestUri
+    )
+    oAuth2Client.setCredentials({refresh_token: config.refreshToken})
+    
+    console.log("oAuth Setup")
+        
+} catch (error) {
+    console.log(error)    
+}
 
 export default oAuth2Client;
