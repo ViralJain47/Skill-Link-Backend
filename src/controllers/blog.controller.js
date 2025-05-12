@@ -1,13 +1,27 @@
 import Blog from "../models/blog.model.js";
 import mongoose from "mongoose";
 
+const getBlogInfo = async (req, res, next) => {
+  try {
+    const blogId = req.params.id;
+    const blogInfo = await Blog.findById(blogId).populate("createdBy");
+    res.status(200).json(blogInfo);
+  } catch (error) {
+    if (error instanceof mongoose.Error) {
+      return next(error);
+    }
+    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 const createBlog = async (req, res, next) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: "file is corrupted" });
     }
 
-    const { title, body, createdBy ,rating , category} = req.body;
+    const { title, body, createdBy, rating, category } = req.body;
     const image = req.file.filename;
     const imageUrl = `/storage/${image}`;
     console.log({ title, body, createdBy, imageUrl });
@@ -18,7 +32,7 @@ const createBlog = async (req, res, next) => {
       coverImage: imageUrl,
       createdBy,
       rating,
-      category
+      category,
     });
 
     if (!newBlog) {
@@ -91,4 +105,4 @@ const deleteBlog = async (req, res, next) => {
   }
 };
 
-export { createBlog, getAllBlogs, deleteBlog, updateBlog };
+export { createBlog, getAllBlogs, deleteBlog, updateBlog, getBlogInfo };
