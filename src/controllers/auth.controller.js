@@ -5,7 +5,7 @@ import { generateOTP, saveOTP, sendOTP } from "../services/otp.service.js"
 import jwt from "jsonwebtoken"
 import { config } from "../../config/env.js";
 
-const registerController = async (req, res) => {
+const registerController = async (req, res,next) => {
     try {
         const { name, email, password } = req.body
 
@@ -18,11 +18,14 @@ const registerController = async (req, res) => {
         res.status(201).json({ message: "User registered successfully" });
 
     } catch (error) {
+        if (error instanceof mongoose.Error) {
+            return next(error)
+        }
         res.status(500).json({ error: "Internal server error" });
     }
 }
 
-const loginController = async (req, res) => {
+const loginController = async (req, res,next) => {
     try {
         const { email } = req.body;
 
@@ -34,27 +37,29 @@ const loginController = async (req, res) => {
 
             const existingUser = await users.findOne({ email: email })
 
-            if(!existingUser.verified)
-            {   
+            if (!existingUser.verified) {
                 await saveOTP(existingUser._id, otp);
                 return res.status(200).json({ message: "OTP sent Successfully", userId: existingUser._id })
             }
 
             const token = jwt.sign({ userId: existingUser._id }, config.jwtSecret, { expiresIn: '2d' })
 
-            return res.status(200).json({message: "user is verified already", token: token } )
+            return res.status(200).json({ message: "user is verified already", token: token })
         }
 
         return res.status(500).json({ error: "Internal server error 2" })
 
 
     } catch (error) {
+        if (error instanceof mongoose.Error) {
+            return next(error)
+        }
         console.log(error)
         res.status(500).json({ error: "Internal server error" })
     }
 }
 
-const OTPVerifyController = async (req, res) => {
+const OTPVerifyController = async (req, res,next) => {
 
     try {
         const { userId } = req.body;
@@ -64,11 +69,14 @@ const OTPVerifyController = async (req, res) => {
         res.status(200).json({ message: "OTP verified successfully", token: token });
 
     } catch (error) {
+        if (error instanceof mongoose.Error) {
+            return next(error)
+        }
         res.status(500).json({ error: "Internal server error" })
     }
 }
 
-const jwtVerifyController = async (req, res) => {
+const jwtVerifyController = async (req, res, next) => {
     try {
         const token = req.headers['authorization'].split(" ")[1];
 
@@ -90,6 +98,9 @@ const jwtVerifyController = async (req, res) => {
         })
 
     } catch (error) {
+        if (error instanceof mongoose.Error) {
+            return next(error)
+        }
         console.log(error)
         res.status(500).json({ error: "Internal server error" })
     }
