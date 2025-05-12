@@ -7,7 +7,7 @@ const createBlog = async (req, res, next) => {
       return res.status(400).json({ error: "file is corrupted" });
     }
 
-    const { title, body, createdBy } = req.body;
+    const { title, body, createdBy ,rating , category} = req.body;
     const image = req.file.filename;
     const imageUrl = `/storage/${image}`;
     console.log({ title, body, createdBy, imageUrl });
@@ -17,6 +17,8 @@ const createBlog = async (req, res, next) => {
       body,
       coverImage: imageUrl,
       createdBy,
+      rating,
+      category
     });
 
     if (!newBlog) {

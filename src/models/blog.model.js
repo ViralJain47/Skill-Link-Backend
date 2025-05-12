@@ -22,7 +22,19 @@ const blogSchema = mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "comments"
         }
-    ]
+    ],
+    rating: {
+        type: Number,
+        min: [1, 'rating should be atleast  1'],
+        max: [5, 'max rating should be atmost 5'],
+        validate: {
+            validator: Number.isInteger,
+            message: '{VALUE} is not an integer'
+          }
+    },
+    category: {
+        type: String
+    }
 }, { timestamps: true })
 
 const Blog = mongoose.model('blogs', blogSchema);
