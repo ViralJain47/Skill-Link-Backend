@@ -1,14 +1,23 @@
 import Blog from "../models/blog.model.js";
-
+import mongoose from "mongoose"
 
 const createBlog = async (req, res,next) => {
     try {
-        const { title, body, coverImage, createdBy } = req.body;
+
+        if(!req.file)
+        {
+            return res.status(400).json({error : "file is corrupted"})
+        }
+
+        const { title, body, createdBy } = req.body;
+        const image = req.file.filename
+        const imageUrl = `/storage/${image}`;
+        console.log({title,body,createdBy,imageUrl})
 
         const newBlog = await Blog.create({
             title,
             body,
-            coverImage,
+            coverImage: imageUrl,
             createdBy
         })
 

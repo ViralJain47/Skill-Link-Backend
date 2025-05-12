@@ -9,7 +9,7 @@ const mongoerr = (error, req, res, next) => {
         return res.status(400).json({ error: 'Invalid ID format' });
     }
 
-    return res.status(400).json({ error: err.name })
+    return res.status(400).json({ error: error })
 
 }
 
