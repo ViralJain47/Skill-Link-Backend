@@ -1,4 +1,5 @@
 import Skill from '../models/skill.model.js'
+import mongoose from 'mongoose'
 
 const createSkill = async (req, res, next) => {
     try {

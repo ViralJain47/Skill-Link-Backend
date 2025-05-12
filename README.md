@@ -32,7 +32,7 @@
 |---------------------|--------|--------------------------------------|----------------------------------------|
 | `/user/:id`         | `GET`  | `{}`                                 | `{skills: [...skills]}`                |
 | `/skills/:id`       | `GET`  | `{}`                                 | `{skill: {...skill}}`                  |
-| `/create`           | `POST` | `{ ..SkillData }` | `{ message, skill: {...newSkill} }` |
+| `/create`           | `POST` | `{ ...SkillData }` | `{ message, skill: {...newSkill} }` |
 | `/update/:id`       | `PUT`  | `{ ...UpdatedData }` | `{ message, skill: {...updatedSkill} }` |
 | `/delete/:id`       | `DELETE`| `{}`                                 | `{ message }` |
 
