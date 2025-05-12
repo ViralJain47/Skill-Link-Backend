@@ -13,6 +13,10 @@ const SkillSchema = new Schema({
         type: Number,
         required: true
     },
+    type:{
+        type: String,
+        enum: ["Learning", "Teaching"]
+    },
     endDate: {
         type: Date,
     },
