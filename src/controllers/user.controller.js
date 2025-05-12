@@ -24,5 +24,17 @@ const updateProfileController = async (req, res,next) => {
 
 }
 
+const getAllUsers = async (req,res,next) => {
+    try {
+        const allUsers = await users.find({}).select('name skillsTaught skillsLearning')
+        res.status(200).json(allUsers)
+    } catch (error) {
+        if (error instanceof mongoose.Error) {
+            return next(error)
+        }
+        res.status(500).json({ error: "Internal server error" });
+    }
+}
 
-export {updateProfileController}  
+
+export {updateProfileController, getAllUsers}  
