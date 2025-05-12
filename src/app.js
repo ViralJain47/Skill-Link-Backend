@@ -45,8 +45,6 @@ try {
 }
 
 const seedDatabase = async () => {
-
-  console.log(customFaker.word.words(5))
   try {
     await users.deleteMany();
     await events.deleteMany();
@@ -56,7 +54,7 @@ const seedDatabase = async () => {
       email: customFaker.internet.email(),
       password: customFaker.internet.password(),
       profilePicture: customFaker.image.avatar(),
-      bio: customFaker.lorem.sentence(),
+      bio: customFaker.helpers.multiple(() => customFaker.word.words({ count: 10 }), { count: 3 }).join('. ') + '.',
       verified: customFaker.datatype.boolean(),
       skillsTaught: customFaker.helpers.shuffle(['JavaScript', 'Node.js', 'React', 'Python', 'Django']).slice(0, 2),
       skillsLearning: customFaker.helpers.shuffle(['Blockchain', 'Docker', 'GraphQL', 'AI', 'ML']).slice(0, 2),
@@ -75,7 +73,7 @@ const seedDatabase = async () => {
 
       return {
         title: customFaker.lorem.words(3),
-        description: customFaker.lorem.paragraph(),
+        description: customFaker.helpers.multiple(() => customFaker.word.words({ count: 10 }), { count: 3 }).join('. ') + '.',
         host: hostId,
         date: customFaker.date.future(),
         maxParticipants: customFaker.number.int({ min: 10, max: 100 }),
