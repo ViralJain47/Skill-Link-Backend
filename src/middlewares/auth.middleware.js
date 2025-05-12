@@ -2,6 +2,7 @@ import validator from 'validator';
 import users from '../models/user.model.js'
 import bcrypt from 'bcryptjs';
 import { verifyOTP } from '../services/otp.service.js';
+import mongoose from 'mongoose';
 
 
 const registerMiddleware = async (req, res, next) => {
@@ -24,6 +25,9 @@ const registerMiddleware = async (req, res, next) => {
 
         next();
     }catch(error){
+        if (error instanceof mongoose.Error) {
+              return next(error);
+            }
         res.status(500).json({error: 'Internal server error'})
     }
 };
@@ -49,6 +53,9 @@ const loginMiddleware = async (req,res,next) => {
         next();
 
     } catch (error) {
+        if (error instanceof mongoose.Error) {
+              return next(error);
+            }
         console.log(error)
         res.status(500).json({error : "Internal server error"})
     }
@@ -67,6 +74,9 @@ const OTPVerifyMiddleware = async (req,res,next) => {
         next();
         
     } catch (error) {
+        if (error instanceof mongoose.Error) {
+              return next(error);
+            }
         res.status(500).json({error: "Internal server error"})
     }
 }

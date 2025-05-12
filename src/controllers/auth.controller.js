@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs"
 import { generateOTP, saveOTP, sendOTP } from "../services/otp.service.js"
 import jwt from "jsonwebtoken"
 import { config } from "../../config/env.js";
+import mongoose from "mongoose";
 
 const registerController = async (req, res,next) => {
     try {

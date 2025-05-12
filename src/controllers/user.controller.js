@@ -1,4 +1,5 @@
 import users from "../models/user.model.js"
+import mongoose from "mongoose";
 
 const updateProfileController = async (req, res,next) => {
     try {
