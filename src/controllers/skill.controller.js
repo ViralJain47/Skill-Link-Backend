@@ -8,7 +8,8 @@ const createSkill = async (req, res, next) => {
             hoursCompleted,
             approxTotalHours,
             endDate,
-            userId
+            userId,
+            type
         } = req.body
 
         const skill = await Skill.create({
@@ -16,6 +17,7 @@ const createSkill = async (req, res, next) => {
             hoursCompleted,
             approxTotalHours,
             endDate,
+            type,
             user: userId
         })
 
