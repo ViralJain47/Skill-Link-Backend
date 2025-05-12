@@ -22,12 +22,10 @@ import mongoerr from "./middlewares/mongoerr.middleware.js";
 import userRoute from "./routes/user.route.js";
 import path from "path"
 import {__storageFolder} from "./utils/storage.js"
-import uploadRoute from "./routes/upload.route.js";
 
 const app = express();
 
 app.use('/storage', express.static(__storageFolder));
-app.use('/api/upload', uploadRoute)
 app.use(express.json());
 app.use(cors());
 app.use(helmet());
