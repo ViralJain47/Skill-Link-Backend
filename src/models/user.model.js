@@ -13,6 +13,10 @@ const userSchema = new mongoose.Schema({
     mentorRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: "sessions" }],
     learnerRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: "sessions" }],
     mentorRating: { type: Number, default: 0 },
+    connections: [{ type: mongoose.Types.ObjectId, ref: 'users',}],
+    socketId: {type: String},
+    messages: [{ type: mongoose.Types.ObjectId, ref: "messages" }],
+    isOnline: {type: Boolean, default: false}
 }, { timestamps: true })
 
 const users = mongoose.model('users',userSchema);
