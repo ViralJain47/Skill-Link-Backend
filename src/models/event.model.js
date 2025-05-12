@@ -9,7 +9,7 @@ const eventSchema = new mongoose.Schema({
     maxParticipants: { type: Number, default: 20 },
     minParticipants: { type: Number, default: 5 },
     duration: { type: String, required: true },
-    media: { type: String },
+    media: [ {type: String} ],
     venue: { type: String, required: true },
     registrationFee: { type: Number, default: 0 },
     type: { type: String},

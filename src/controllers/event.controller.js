@@ -4,7 +4,14 @@ import events from "../models/event.model.js";
 
 const createEvent = async (req, res, next) => {
     try {
-        const { title, description, date, time, duration, venue, type, maxParticipants, host, registrationFee, status, media } = req.body;
+
+        if(!req.files || req.files.length == 0)
+        {
+            return res.status(400).json({error : "file not found"})
+        }
+
+        const { title, description, date, time, duration, venue, type, maxParticipants, host, registrationFee, status } = req.body;
+        const images = req.files.map(file => `storage/${file.filename}`)
 
         const newEvent = await events.create({
             title,
@@ -18,7 +25,7 @@ const createEvent = async (req, res, next) => {
             host,
             registrationFee,
             status,
-            media,
+            media: images,
         })
 
         if (!newEvent) {
