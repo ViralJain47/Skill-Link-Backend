@@ -1,5 +1,7 @@
 import Blog from "../models/blog.model.js";
 import mongoose from "mongoose";
+import fs from 'fs'
+import { __rootFolder } from "../utils/storage.js";
 
 const getBlogInfo = async (req, res, next) => {
   try {
@@ -96,8 +98,19 @@ const deleteBlog = async (req, res, next) => {
       return res.status(400).json({ message: "Blog not found" });
     }
 
+    const filePath = `${__rootFolder}${deletedBlog.coverImage}`
+
+    fs.access(filePath, fs.constants.F_OK, err => {
+      if(err) console.log(err);
+
+      fs.unlink(filePath, (err) =>{
+        if (err) console.log(err)
+      })
+    })
+
     res.status(200).json({ message: "Blog deleted successfully" });
   } catch (error) {
+    console.log(error)
     if (error instanceof mongoose.Error) {
       return next(error);
     }

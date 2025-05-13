@@ -18,7 +18,9 @@ export const initSocket = (server) => {
         console.log("New client connected:", socket.id);
         const userId = socket.handshake.query["userId"];
 
-        const user = await users.findById(userId).populate('connections', 'socketId');
+        console.log(userId)
+
+        const user = await users.findById(userId).populate('connections');
         user.socketId = socket.id;
         user.isOnline = true;
         await user.save();
@@ -34,6 +36,8 @@ export const initSocket = (server) => {
         })
 
         socket.on("disconnect", async () => {
+
+          console.log(socket.id, " disconnected")
           user.isOnline = false;
           await user.save();
 
@@ -46,7 +50,7 @@ export const initSocket = (server) => {
         })
 
       } catch (error) {
-
+          console.log(error)
       }
 
     });
