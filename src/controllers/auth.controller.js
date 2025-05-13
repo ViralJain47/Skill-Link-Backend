@@ -90,6 +90,8 @@ const jwtVerifyController = async (req, res, next) => {
                 const decodedUser = await users.findById(userId)
                     .populate("mentorRequests", sessions)
                     .populate("learnerRequests", sessions)
+                    .populate("skillsLearning")
+                    .populate("skillsTaught")
                     .select("-password");
 
                 console.log(decodedUser)

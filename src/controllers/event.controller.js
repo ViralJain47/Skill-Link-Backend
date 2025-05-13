@@ -5,13 +5,11 @@ import events from "../models/event.model.js";
 const createEvent = async (req, res, next) => {
     try {
 
-        if(!req.files || req.files.length == 0)
-        {
-            return res.status(400).json({error : "file not found"})
-        }
+        console.log("req.files: ",req.files)
+        console.log("req.file: ", req.file)
 
-        const { title, description, date, time, duration, venue, type, maxParticipants, host, registrationFee, status } = req.body;
-        const images = req.files.map(file => `storage/${file.filename}`)
+        const { title, description, date, time, duration, venue, type, maxParticipants, host, registrationFee, status, media } = req.body;
+        const images = req.files?.map(file => `storage/${file.filename}`)
 
         const newEvent = await events.create({
             title,
@@ -25,7 +23,7 @@ const createEvent = async (req, res, next) => {
             host,
             registrationFee,
             status,
-            media: images,
+            media: images
         })
 
         if (!newEvent) {
@@ -35,6 +33,7 @@ const createEvent = async (req, res, next) => {
         res.status(201).json({ message: "Event created successfully", event: newEvent })
 
     } catch (error) {
+        console.log(error)
 
         if (error instanceof mongoose.Error) {
             return next(error)

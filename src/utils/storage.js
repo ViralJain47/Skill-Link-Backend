@@ -13,6 +13,7 @@ const storage = multer.diskStorage({
       cb(null, __storageFolder);
     },
     filename: function (req, file, cb) {
+      console.log(file)
       const ext = path.extname(file.originalname)
       const uniqueName = uuidv4() + ext
       console.log({uniqueName})
