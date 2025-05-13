@@ -1,6 +1,7 @@
 import mongoose, { MongooseError } from "mongoose";
 import events from "../models/event.model.js";
-
+import { __rootFolder } from "../utils/storage.js";
+import fs from "fs"
 
 const createEvent = async (req, res, next) => {
     try {
@@ -9,7 +10,7 @@ const createEvent = async (req, res, next) => {
         console.log("req.file: ", req.file)
 
         const { title, description, date, time, duration, venue, type, maxParticipants, host, registrationFee, status, media } = req.body;
-        const images = req.files?.map(file => `storage/${file.filename}`)
+        const images = req.files?.map(file => `/storage/${file.filename}`)
 
         const newEvent = await events.create({
             title,
@@ -85,9 +86,23 @@ const deleteEvent = async (req, res,next) => {
             return res.status(400).json({ message: 'Event not found' });
         }
 
+        deletedEvent.media.map(file => {
+
+            const filePath = `${__rootFolder}${file}`
+
+            fs.access(filePath, fs.constants.F_OK, err => {
+                if(err) console.log(err);
+          
+                fs.unlink(filePath, (err) =>{
+                  if (err) console.log(err)
+                })
+              })
+        })
+        
+
         res.status(200).json({ message: 'Event deleted successfully' });
     } catch (error) {
-
+        console.log(error)
         if (error instanceof mongoose.Error) {
             next(error)
         }
