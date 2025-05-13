@@ -1,5 +1,5 @@
 import { Server } from "socket.io";
-import users from "../models/user.model";
+import users from "../models/user.model.js";
 
 export const initSocket = (server) => {
 
