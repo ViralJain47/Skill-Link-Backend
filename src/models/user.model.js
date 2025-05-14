@@ -8,15 +8,13 @@ const userSchema = new mongoose.Schema({
     profilePicture: { type: String },
     bio: { type: String },
     verified: {type: Boolean , default: false},
-    skillsTaught: [{ type: String }],
-    skillsLearning: [{ type: String }],
+    skillsTaught: [{ type: mongoose.Types.ObjectId , ref: "skills" }],
+    skillsLearning: [{ type: mongoose.Types.ObjectId , ref: "skills"}],
     mentorRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: "sessions" }],
     learnerRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: "sessions" }],
     mentorRating: { type: Number, default: 0 },
     connections: [{ type: mongoose.Types.ObjectId, ref: 'users',}],
-    socketId: {type: String},
     messages: [{ type: mongoose.Types.ObjectId, ref: "messages" }],
-    isOnline: {type: Boolean, default: false}
 }, { timestamps: true })
 
 const users = mongoose.model('users',userSchema);

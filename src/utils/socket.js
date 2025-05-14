@@ -1,5 +1,6 @@
 import { Server } from "socket.io";
 import users from "../models/user.model.js";
+import { onlineUsers } from "./mem.js";
 
 export const initSocket = (server) => {
 
@@ -18,12 +19,11 @@ export const initSocket = (server) => {
         console.log("New client connected:", socket.id);
         const userId = socket.handshake.query["userId"];
 
-        console.log(userId)
+        if (userId) {
+          onlineUsers.set(userId, socket.id)
+        }
 
         const user = await users.findById(userId).populate('connections');
-        user.socketId = socket.id;
-        user.isOnline = true;
-        await user.save();
 
         user.connections.forEach(c => {
           c.emit('online', {
@@ -36,21 +36,17 @@ export const initSocket = (server) => {
         })
 
         socket.on("disconnect", async () => {
-
-          console.log(socket.id, " disconnected")
-          user.isOnline = false;
-          await user.save();
-
+          onlineUsers.delete(userId)
           user.connections.forEach(c => {
             c.emit('offline', {
               user: userId
             })
           })
-
+          console.log(`User with userId -${userId}- disconnected`)
         })
 
       } catch (error) {
-          console.log(error)
+        console.log(error)
       }
 
     });

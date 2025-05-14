@@ -15,7 +15,8 @@ const SkillSchema = new Schema({
     },
     type:{
         type: String,
-        enum: ["Learning", "Teaching"]
+        enum: ["Learning", "Teaching"],
+        required: true
     },
     endDate: {
         type: Date,
