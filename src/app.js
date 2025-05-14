@@ -20,7 +20,7 @@ import skillRouter from "./routes/skill.route.js";
 import blogRoute from "./routes/blog.route.js";
 import mongoerr from "./middlewares/mongoerr.middleware.js";
 import userRoute from "./routes/user.route.js";
-import path from "path"
+import messageRoute from "./routes/message.route.js";
 import {__storageFolder} from "./utils/storage.js"
 
 const app = express();
@@ -33,7 +33,8 @@ app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute)
 app.use("/api/event", eventRoute);
 app.use("/api/skill", skillRouter);
-app.use("/api/blog", blogRoute)
+app.use("/api/blog", blogRoute);
+app.use("/api/message", messageRoute)
 app.use(mongoerr)
 
 try { 

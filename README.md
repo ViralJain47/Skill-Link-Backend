@@ -48,3 +48,9 @@
 | `/delete/:id`       | `DELETE`| `{}`                                 | `{ message }` |
 
 ---
+
+### **Message Routes (`/api/message`)**
+| Endpoint            | Method | Request Body / Headers / Query       | Response (200 OK)                      |
+|---------------------|--------|--------------------------------------|----------------------------------------|
+| `/:sender/:receiver`| `GET`  | {}                                   | [...messages]                          |
+  

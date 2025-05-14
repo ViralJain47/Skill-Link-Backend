@@ -14,7 +14,6 @@ const userSchema = new mongoose.Schema({
     learnerRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: "sessions" }],
     mentorRating: { type: Number, default: 0 },
     connections: [{ type: mongoose.Types.ObjectId, ref: 'users',}],
-    messages: [{ type: mongoose.Types.ObjectId, ref: "messages" }],
 }, { timestamps: true })
 
 const users = mongoose.model('users',userSchema);
