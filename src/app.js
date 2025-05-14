@@ -46,6 +46,5 @@ try {
 }
 
 
-
 export default app;
 export {mongoose};
