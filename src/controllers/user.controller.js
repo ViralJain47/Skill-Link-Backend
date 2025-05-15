@@ -1,8 +1,9 @@
 import users from "../models/user.model.js"
 import mongoose from "mongoose";
 
-const updateProfileController = async (req, res,next) => {
+const updateProfileController = async (req, res, next) => {
     try {
+        console.log(req.params)
         const userId = req.params.id;
         const updatedData = req.body;
 
@@ -37,5 +38,19 @@ const getAllUsers = async (req,res,next) => {
     }
 }
 
+const getUserWithId = async (req, res, next) => {
+    try {
+        const userId = req.params.id;
+        const user = await users.findById(userId).populate("skillsLearning", "title").populate("skillsTaught", "title").select('name skillsTaught skillsLearning connections email')
+        console.log(userId, user);
+        res.status(200).json(user);
 
-export {updateProfileController, getAllUsers}  
+    } catch (error) {
+        if (error instanceof mongoose.Error) {
+            return next(error)
+        }
+        res.status(500).json({ error: "Internal server error" });
+    }
+}
+
+export {updateProfileController, getAllUsers, getUserWithId}  
