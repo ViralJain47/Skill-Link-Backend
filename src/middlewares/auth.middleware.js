@@ -43,7 +43,7 @@ const loginMiddleware = async (req,res,next) => {
             return res.status(400).json({ error: "User not found" })
         }
 
-        const match = await bcrypt.compare(password, existingUser.password)
+        const match =  bcrypt.compare(password, existingUser.password)
 
         if(!match)
         {

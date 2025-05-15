@@ -7,11 +7,13 @@ const getPrivateMessages = async (req, res, next) => {
     try {
         const { sender, receiver } = req.params;
 
-        console.log(sender, " ", receiver)
 
-        const allMessages = await messages.find({ sender, receiver })
+        const allMessages = await messages.find({ $or : [
+            {sender , receiver},
+            {sender: receiver, receiver:sender}
+        ] })
 
-        console.log(allMessages)
+
 
         res.status(200).json({ message: "Message fetched successfully", messages: allMessages })
 
@@ -28,8 +30,6 @@ const getConversationList = async (req, res, next) => {
     try {
         const { userId } = req.params;
 
-        console.log(userId)
-
         const allMessages = await messages.find({
             $or: [
                 { sender: userId },
@@ -37,7 +37,6 @@ const getConversationList = async (req, res, next) => {
             ]
         }).sort({ timestamp: -1 }); 
 
-        console.log(allMessages)
 
         const uniquePairs = new Map();
 
@@ -49,7 +48,6 @@ const getConversationList = async (req, res, next) => {
                 const otherUserId = msg.sender == userId ? msg.receiver : msg.sender;
 
                 const otherUser = await users.findById(otherUserId).lean();
-                console.log(otherUser)
 
                 console.log(msg)
 
@@ -66,7 +64,6 @@ const getConversationList = async (req, res, next) => {
 
         
         const conversationList = Array.from(uniquePairs.values());
-        console.log(conversationList)
 
         res.status(200).json({
             message: "Conversations fetched successfully",

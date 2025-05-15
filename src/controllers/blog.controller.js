@@ -68,7 +68,6 @@ const getAllBlogs = async (req, res, next) => {
 const updateBlog = async (req, res, next) => {
   try {
     const { id } = req.params;
-    console.log(id);
     const updatedBlog = await Blog.findByIdAndUpdate(
       id,
       { ...req.body },

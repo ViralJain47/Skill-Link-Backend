@@ -23,12 +23,14 @@ export const initSocket = (server) => {
           onlineUsers.set(userId, socket.id)
         }
 
+        socket.emit("online-users", Array.from(onlineUsers.keys()))
+
         const user = await users.findById(userId).populate('connections');
 
+        io.emit("online", userId)
+
         user.connections.forEach(c => {
-          c.emit('online', {
-            user: userId
-          })
+          io.emit('online', userId)
         })
 
         socket.on("message", async (message) => {
@@ -37,11 +39,12 @@ export const initSocket = (server) => {
 
         socket.on("disconnect", async () => {
           onlineUsers.delete(userId)
+          io.emit('offline', userId);
+
           user.connections.forEach(c => {
-            c.emit('offline', {
-              user: userId
-            })
-          })
+          io.emit('online', userId)
+        })
+
           console.log(`User with userId -${userId}- disconnected`)
         })
 
