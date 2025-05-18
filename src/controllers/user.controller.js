@@ -3,8 +3,9 @@ import mongoose from "mongoose";
 
 const updateProfileController = async (req, res, next) => {
   try {
-    const userId = req.params.id;
+    const userId = req.params.userId;
     const updatedData = req.body;
+
 
     const updatedUser = await users.findByIdAndUpdate(
       userId,
@@ -15,7 +16,7 @@ const updateProfileController = async (req, res, next) => {
     );
 
     if (!updatedUser) {
-      return res.status(404).json({ message: "Unable to update user data" });
+      return res.status(404).json({ updatedUser, message: "Unable to update user data" });
     }
 
     res.status(200).json({ message: "User updated" });
