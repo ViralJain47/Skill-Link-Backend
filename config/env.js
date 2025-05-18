@@ -10,4 +10,5 @@ export const config = {
   clientSecret: process.env.CLIENT_SECRET,
   requestUri: process.env.REQUEST_URI,
   refreshToken: process.env.REFRESH_TOKEN,
+  upstashUrl: process.env.UPSTASH_URL
 };
