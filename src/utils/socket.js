@@ -2,6 +2,7 @@ import { Server } from "socket.io";
 import users from "../models/user.model.js";
 import { onlineUsers } from "./mem.js";
 import messages from "../models/message.model.js";
+import logger from "./logger.js";
 
 export const initSocket = (server) => {
 
@@ -13,11 +14,11 @@ export const initSocket = (server) => {
       },
     });
 
-    console.log("socket setup")
+    logger.info("SOCKET SETUP COMPLETE")
 
     io.on("connection", async (socket) => {
       try {
-        console.log("New client connected:", socket.id);
+        logger.info("New client connected:", socket.id);
 
         // GET userID from socket metadata provided by client
         const userId = socket.handshake.query["userId"];
@@ -33,9 +34,7 @@ export const initSocket = (server) => {
             status: 'sent'
         })
 
-        console.log("notDeliveredMessages: ", notDeliveredMessages)
           notDeliveredMessages.forEach(async msg => {
-              console.log("reached here")
               socket.emit("private:receive-message", {
                 ...msg.toObject(),
                 status: "delivered"
@@ -44,10 +43,7 @@ export const initSocket = (server) => {
               msg.status = 'delivered'
               await msg.save()
 
-              console.log("msg: ", msg.sender)
-
               const senderSocketId = onlineUsers.get(msg.sender.toString());
-              console.log("socket sender : ", senderSocketId)
                 if (senderSocketId) {
                   io.to(senderSocketId).emit("private:message-delivered", msg);
                 }
@@ -97,8 +93,6 @@ export const initSocket = (server) => {
             status: 'sent',
           })
 
-          console.log({newMessage, tempId: message.tempId})
-
           socket.emit("private:message-sent", {...newMessage.toObject(), tempId: message.tempId});
 
           if (toSocket) {
@@ -133,18 +127,18 @@ export const initSocket = (server) => {
             io.emit('online', userId)
           })
 
-          console.log(`User with userId -${userId}- disconnected`)
+          logger.log(`User with userId -${userId}- disconnected`)
         })
 
       } catch (error) {
-        console.log(error)
+        logger.error(error.message)
       }
 
     });
 
     return io;
   } catch (error) {
-    console.log(error)
+    logger.error(error.message)
   }
 
 };

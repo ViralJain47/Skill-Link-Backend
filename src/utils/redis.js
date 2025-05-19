@@ -1,13 +1,14 @@
 import {config} from "../../config/env.js" 
 import {Redis} from 'ioredis'
+import logger from "./logger.js";
 let client;
 
 (async () => {
     try {
         client = new Redis(config.upstashUrl)
-        console.log("redis client connected")
+        logger.info("REDIS UPSTASH SETUP COMPLETE")
     } catch (error) {
-        console.log(error)
+       logger.error(error.message)
     }
     
 })();

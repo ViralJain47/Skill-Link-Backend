@@ -1,5 +1,6 @@
 import users from "../models/user.model.js";
 import mongoose from "mongoose";
+import logger from "../utils/logger.js";
 
 const updateProfileController = async (req, res, next) => {
   try {
@@ -23,6 +24,7 @@ const updateProfileController = async (req, res, next) => {
     if (error instanceof mongoose.Error) {
       return next(error);
     }
+    logger.error(error.message)
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -37,6 +39,7 @@ const getAllUsers = async (req, res, next) => {
     if (error instanceof mongoose.Error) {
       return next(error);
     }
+    logger.error(error.message)
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -57,6 +60,7 @@ const getUserWithId = async (req, res, next) => {
     if (error instanceof mongoose.Error) {
       return next(error);
     }
+    logger.error(error.message)
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -80,6 +84,7 @@ const sendConnectionRequest = async (req, res, next) => {
     if (error instanceof mongoose.Error) {
       return next(error);
     }
+    logger.error(error.message)
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -91,8 +96,6 @@ const changeConnectionRequest = async (req, res, next) => {
 
     const receiver = await users.findById(receiverId);
     const sender = await users.findById(senderId);
-    
-    console.log(receiver, sender);
 
     if (response == "accept") {
       sender.connections.push({
@@ -115,13 +118,13 @@ const changeConnectionRequest = async (req, res, next) => {
 
     await sender.save();
     await receiver.save();
-    console.log(receiver, sender);
 
     res.status(200).json({ message: "Connection request accepted" });
   } catch (error) {
     if (error instanceof mongoose.Error) {
       return next(error);
     }
+    logger.error(error.message)
     res.status(500).json({ error: "Internal server error" });
   }
 };

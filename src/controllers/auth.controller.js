@@ -5,6 +5,7 @@ import { generateOTP, saveOTP, sendOTP } from "../services/otp.service.js"
 import jwt from "jsonwebtoken"
 import { config } from "../../config/env.js";
 import mongoose from "mongoose";
+import logger from "../utils/logger.js";
 
 const registerController = async (req, res,next) => {
     try {
@@ -20,6 +21,7 @@ const registerController = async (req, res,next) => {
         if (error instanceof mongoose.Error) {
             return next(error)
         }
+        logger.error(error)
         res.status(500).json({ error: "Internal server error" });
     }
 }
@@ -53,7 +55,7 @@ const loginController = async (req, res,next) => {
         if (error instanceof mongoose.Error) {
             return next(error)
         }
-        console.log(error)
+        logger.error(error)
         res.status(500).json({ error: "Internal server error" })
     }
 }
@@ -71,6 +73,7 @@ const OTPVerifyController = async (req, res,next) => {
         if (error instanceof mongoose.Error) {
             return next(error)
         }
+        logger.error(error)
         res.status(500).json({ error: "Internal server error" })
     }
 }
@@ -92,8 +95,6 @@ const jwtVerifyController = async (req, res, next) => {
                     .populate("skillsTaught")
                     .select("-password");
 
-                console.log(decodedUser)
-
                 res.status(200).json(decodedUser)
             }
         })
@@ -102,7 +103,7 @@ const jwtVerifyController = async (req, res, next) => {
         if (error instanceof mongoose.Error) {
             return next(error)
         }
-        console.log(error)
+        logger.error(error)
         res.status(500).json({ error: "Internal server error" })
     }
 }

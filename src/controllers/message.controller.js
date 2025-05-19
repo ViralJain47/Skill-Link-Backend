@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 import messages from '../models/message.model.js'
 import {onlineUsers} from "../utils/mem.js"
 import users from '../models/user.model.js'
+import logger from '../utils/logger.js'
 
 const getPrivateMessages = async (req, res, next) => {
     try {
@@ -21,7 +22,7 @@ const getPrivateMessages = async (req, res, next) => {
         if (error instanceof mongoose.Error) {
             return next(error)
         }
-
+        logger.error(error.message)
         return res.status(500).json({ error: "Internal Server error" })
     }
 }
@@ -49,7 +50,6 @@ const getConversationList = async (req, res, next) => {
 
                 const otherUser = await users.findById(otherUserId).lean();
 
-                console.log(msg)
 
                 uniquePairs.set(key, {
                     userId: otherUserId,
@@ -71,6 +71,11 @@ const getConversationList = async (req, res, next) => {
         });
 
     } catch (error) {
+        if(error instanceof mongoose.Error)
+        {
+            return next(error)
+        }
+        logger.error(error.message)
         return res.status(500).json({ error: "Internal Server Error" });
     }
 };

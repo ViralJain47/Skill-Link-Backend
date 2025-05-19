@@ -48,6 +48,7 @@ const createSkill = async (req, res, next) => {
         if (error instanceof mongoose.Error) {
             return next(error)
         }
+        logger.error(error.message)
         res.status(500).json({ message: "internal server error" })
     }
 }
@@ -65,7 +66,7 @@ const getAllUserSkills = async (req, res, next) => {
         if (error instanceof mongoose.Error) {
             return next(error)
         }
-        console.log(error)
+        logger.error(error.message)
         res.status(500).json({ error: "Internal server error" });
     }
 }
@@ -90,7 +91,7 @@ const getSkill = async (req, res,next) => {
         if (error instanceof mongoose.Error) {
             return next(error)
         }
-        console.log(error)
+        logger.error(error.message)
         res.status(500).json({ error: "Internal server error" });
     }
 }
@@ -112,7 +113,7 @@ const updateSkill = async (req, res,next) => {
         if (error instanceof mongoose.Error) {
             return next(error)
         }
-        console.log(error)
+        logger.error(error.message)
         res.status(500).json({ error: "Internal server error" })
     }
 }
@@ -149,7 +150,7 @@ const deleteSkill = async (req, res,next) => {
         if (error instanceof mongoose.Error) {
             return next(error)
         }
-        console.log(error)
+        logger.error(error.message)
         res.status(500).json({ error: "Internal server error" })
     }
 }

@@ -2,6 +2,7 @@ import nodemailer from 'nodemailer'
 import oAuth2Client from '../utils/oauth.js';
 import client from '../utils/redis.js';
 import { config } from '../../config/env.js';
+import logger from '../utils/logger.js';
 
 const sendOTP = async (receiver,otp) => {
 
@@ -41,7 +42,7 @@ const sendOTP = async (receiver,otp) => {
 		return new Promise((resolve, reject) => {
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
-                    console.error("Error sending email:", error);
+                    logger.error(error.message)
                     reject(false);
                 } else {
                     resolve(true);
@@ -50,17 +51,17 @@ const sendOTP = async (receiver,otp) => {
         });
 
 	} catch (error) {
-		console.log(error)
+		logger.error(error.message)
 		return false;
 	}
 }
 
 const saveOTP = async (userId, otp) => {
-    await client.SETEX(`otp:${userId}`, 300, otp);
+    await client.setex(`otp:${userId}`, 300, otp);
 }
 
 const  verifyOTP = async (userId, inputOtp, callback) => {
-	const storedOTP = await client.GET(`otp:${userId}`)
+	const storedOTP = await client.get(`otp:${userId}`)
 
 	if(storedOTP && storedOTP == inputOtp)
 	{

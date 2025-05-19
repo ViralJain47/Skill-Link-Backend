@@ -12,7 +12,7 @@ const getBlogInfo = async (req, res, next) => {
     if (error instanceof mongoose.Error) {
       return next(error);
     }
-    console.log(error);
+    logger.error(error.message)
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -26,7 +26,6 @@ const createBlog = async (req, res, next) => {
     const { title, body, createdBy, rating, category } = req.body;
     const image = req.file.filename;
     const imageUrl = `/storage/${image}`;
-    console.log({ title, body, createdBy, imageUrl });
 
     const newBlog = await Blog.create({
       title,
@@ -41,13 +40,12 @@ const createBlog = async (req, res, next) => {
       return res.status(401);
     }
 
-    res
-      .status(201)
-      .json({ message: "Blog created successfully", blog: newBlog });
+    res.status(201).json({ message: "Blog created successfully", blog: newBlog });
   } catch (error) {
     if (error instanceof mongoose.Error) {
       return next(error);
     }
+    logger.error(error.message)
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -60,7 +58,7 @@ const getAllBlogs = async (req, res, next) => {
     if (error instanceof mongoose.Error) {
       return next(error);
     }
-    console.log(error);
+    logger.error(error.message)
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -85,6 +83,7 @@ const updateBlog = async (req, res, next) => {
     if (error instanceof mongoose.Error) {
       return next(error);
     }
+    logger.error(error.message)
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -100,19 +99,19 @@ const deleteBlog = async (req, res, next) => {
     const filePath = `${__rootFolder}${deletedBlog.coverImage}`
 
     fs.access(filePath, fs.constants.F_OK, err => {
-      if(err) console.log(err);
+      if(err) logger.error(err)
 
       fs.unlink(filePath, (err) =>{
-        if (err) console.log(err)
+        if (err) logger.error(err)
       })
     })
 
     res.status(200).json({ message: "Blog deleted successfully" });
   } catch (error) {
-    console.log(error)
     if (error instanceof mongoose.Error) {
       return next(error);
     }
+    logger.error(error.message)
     res.status(500).json({ error: "Internal server error" });
   }
 };
